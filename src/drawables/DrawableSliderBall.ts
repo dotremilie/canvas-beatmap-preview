@@ -1,4 +1,4 @@
-import MathUtils from "../renderers/MathUtils.ts";
+import MathUtils from "../utils/MathUtils.ts";
 import {CIRCLE_BORDER_WIDTH} from "../renderers/OsuRenderer.ts";
 import {DrawableSlider} from "./DrawableSlider.ts";
 
