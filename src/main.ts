@@ -25,9 +25,9 @@ export const createPreview = (id: string, url: string) => {
     const reader = new BeatmapDecoder();
     const ruleset = new StandardRuleset();
 
-    const audio = new Audio();
+/*    const audio = new Audio();
     audio.volume = 0.01;
-    audio.loop = true;
+    audio.loop = true;*/
 
     fetch(url).then(
         response => response.text()
@@ -40,11 +40,11 @@ export const createPreview = (id: string, url: string) => {
             //const previewTime = standardBeatmap.general.previewTime;
             const previewTime = 0;
 
-            audio.src = '/assets/Renatus.mp3';
+/*            audio.src = '/assets/Renatus.mp3';
             audio.playbackRate = TIME_MULTIPLIER;
             audio.play().catch((err) => {
                 console.error('Failed to play audio:', err);
-            });
+            });*/
 
             const animate = (currentTime: number) => {
                 const time = (currentTime - startTime + previewTime) * TIME_MULTIPLIER;
@@ -65,3 +65,5 @@ export const createPreview = (id: string, url: string) => {
 }
 
 createPreview('preview', '/assets/Renatus.osu');
+createPreview('aspire', '/assets/aspire.osu');
+createPreview('neto', '/assets/neto.osu');
