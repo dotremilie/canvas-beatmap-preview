@@ -4,8 +4,11 @@ import OsuRenderer from "./renderers/OsuRenderer.ts";
 
 const TIME_MULTIPLIER = 1;
 
-const createPreview = (url: string) => {
-    const canvas = document.getElementById('app') as HTMLCanvasElement;
+export const createPreview = (id: string, url: string) => {
+    const canvas = document.createElement('canvas') as HTMLCanvasElement;
+    canvas.setAttribute('id', id);
+    document.body.appendChild(canvas);
+
     const ctx = canvas.getContext('2d');
 
     if (!ctx) {
@@ -61,4 +64,4 @@ const createPreview = (url: string) => {
     )
 }
 
-createPreview('/assets/Renatus.osu');
+createPreview('preview', '/assets/Renatus.osu');
