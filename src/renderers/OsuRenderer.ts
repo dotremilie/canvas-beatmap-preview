@@ -42,7 +42,7 @@ export default class OsuRenderer {
     }
 
     render(time: number) {
-        this.drawableHitObjects.filter(object => {
+        let hitObjects = this.drawableHitObjects.filter(object => {
             if (time < object.hitObject.startTime - object.hitObject.timePreempt) return false;
 
             if (object instanceof DrawableSlider || object instanceof DrawableSpinner) {
@@ -52,8 +52,20 @@ export default class OsuRenderer {
             }
 
             return true;
-        }).reverse().forEach((object) => {
+        }).reverse();
+
+        hitObjects.forEach((object) => {
             object.draw(this.ctx, time);
+        });
+
+        hitObjects.forEach((object) => {
+            if (object instanceof DrawableSlider) {
+                object.sliderHead.approachCircle.draw(this.ctx, time);
+            }
+
+            if (object instanceof DrawableCircle) {
+                object.approachCircle.draw(this.ctx, time);
+            }
         });
     }
 }

@@ -36,8 +36,6 @@ export class DrawableCircle extends DrawableStandardHitObject<Circle> {
         ctx.textAlign = 'center';
         ctx.fillStyle = `rgba(255,255,255,${opacity})`;
         ctx.fillText((currentComboIndex + 1).toString(), x, y);
-
-        this.approachCircle.draw(ctx, time);
     }
 
     opacity(time: number): number {
