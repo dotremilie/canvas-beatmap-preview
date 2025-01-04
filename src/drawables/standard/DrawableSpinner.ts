@@ -1,5 +1,5 @@
 import {Spinner} from "osu-standard-stable";
-import MathUtils from "../utils/MathUtils.ts";
+import MathUtils from "../../utils/MathUtils.ts";
 import {DrawableStandardHitObject} from "./DrawableStandardHitObject.ts";
 
 export class DrawableSpinner extends DrawableStandardHitObject<Spinner> {

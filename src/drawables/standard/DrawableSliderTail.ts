@@ -1,9 +1,9 @@
 import {DrawableStandardHitObject} from "./DrawableStandardHitObject.ts";
-import {Slider, SliderRepeat} from "osu-standard-stable";
+import {Slider, SliderTail} from "osu-standard-stable";
 import {DrawableSlider} from "./DrawableSlider.ts";
-import {CIRCLE_BORDER_WIDTH} from "../renderers/OsuRenderer.ts";
+import {CIRCLE_BORDER_WIDTH} from "../../renderers/StandardRenderer.ts";
 
-export class DrawableSliderRepeat extends DrawableStandardHitObject<SliderRepeat> {
+export class DrawableSliderTail extends DrawableStandardHitObject<SliderTail> {
     get slider(): Slider {
         return this.drawableSlider?.hitObject;
     }
@@ -12,11 +12,8 @@ export class DrawableSliderRepeat extends DrawableStandardHitObject<SliderRepeat
         return this.parentHitObject as DrawableSlider;
     }
 
-    private animDuration: number;
-
-    constructor(hitObject: SliderRepeat) {
+    constructor(hitObject: SliderTail) {
         super(hitObject);
-        this.animDuration = Math.min(300, hitObject.spanDuration)
     }
 
     draw(ctx: CanvasRenderingContext2D, time: number) {
@@ -32,15 +29,5 @@ export class DrawableSliderRepeat extends DrawableStandardHitObject<SliderRepeat
         ctx.arc(x, y, radius, 0, Math.PI * 2);
         ctx.fill();
         ctx.stroke();
-    }
-
-    opacity(time: number): number {
-        let opacity = super.opacity(time);
-
-        if (this.hitObject.repeatIndex > 0) {
-            opacity = Math.min(1, Math.max(0, 1 - (time - this.hitObject.startTime) / this.animDuration));
-        }
-
-        return opacity;
     }
 }

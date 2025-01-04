@@ -1,5 +1,5 @@
 import {Slider} from "osu-standard-stable";
-import {CIRCLE_BORDER_WIDTH} from "../renderers/OsuRenderer.ts";
+import {CIRCLE_BORDER_WIDTH} from "../../renderers/StandardRenderer.ts";
 import {Color4} from "osu-classes";
 import {DrawableStandardHitObject} from "./DrawableStandardHitObject.ts";
 
