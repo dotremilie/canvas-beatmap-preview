@@ -3,6 +3,7 @@ import {BeatmapDecoder} from "osu-parsers";
 import OsuRenderer from "./renderers/OsuRenderer.ts";
 
 const TIME_MULTIPLIER = 1;
+const PREVIEW_TIME_FROM_BEATMAP = false;
 
 export const createPreview = (id: string, url: string) => {
     const canvas = document.createElement('canvas') as HTMLCanvasElement;
@@ -25,10 +26,6 @@ export const createPreview = (id: string, url: string) => {
     const reader = new BeatmapDecoder();
     const ruleset = new StandardRuleset();
 
-/*    const audio = new Audio();
-    audio.volume = 0.01;
-    audio.loop = true;*/
-
     fetch(url).then(
         response => response.text()
     ).then(
@@ -37,14 +34,7 @@ export const createPreview = (id: string, url: string) => {
             const standardBeatmap = ruleset.applyToBeatmap(beatmap);
             const renderer = new OsuRenderer(ctx, standardBeatmap);
 
-            //const previewTime = standardBeatmap.general.previewTime;
-            const previewTime = 0;
-
-/*            audio.src = '/assets/Renatus.mp3';
-            audio.playbackRate = TIME_MULTIPLIER;
-            audio.play().catch((err) => {
-                console.error('Failed to play audio:', err);
-            });*/
+            const previewTime = PREVIEW_TIME_FROM_BEATMAP ? standardBeatmap.general.previewTime : 0;
 
             const animate = (currentTime: number) => {
                 const time = (currentTime - startTime + previewTime) * TIME_MULTIPLIER;
