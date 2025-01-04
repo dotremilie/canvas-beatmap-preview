@@ -2,8 +2,8 @@ import {StandardRuleset} from "osu-standard-stable";
 import {BeatmapDecoder} from "osu-parsers";
 import StandardRenderer from "./renderers/StandardRenderer.ts";
 
-const TIME_MULTIPLIER = 1;
-const PREVIEW_TIME_FROM_BEATMAP = false;
+export const TIME_MULTIPLIER = 1;
+export const PREVIEW_TIME_FROM_BEATMAP = false;
 
 export const createPreview = (id: string, url: string) => {
     const canvas = document.createElement('canvas') as HTMLCanvasElement;
