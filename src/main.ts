@@ -1,6 +1,6 @@
 import {StandardRuleset} from "osu-standard-stable";
 import {BeatmapDecoder} from "osu-parsers";
-import OsuRenderer from "./renderers/OsuRenderer.ts";
+import StandardRenderer from "./renderers/StandardRenderer.ts";
 
 const TIME_MULTIPLIER = 1;
 const PREVIEW_TIME_FROM_BEATMAP = false;
@@ -32,7 +32,7 @@ export const createPreview = (id: string, url: string) => {
         data => {
             const beatmap = reader.decodeFromString(data);
             const standardBeatmap = ruleset.applyToBeatmap(beatmap);
-            const renderer = new OsuRenderer(ctx, standardBeatmap);
+            const renderer = new StandardRenderer(ctx, standardBeatmap);
 
             const previewTime = PREVIEW_TIME_FROM_BEATMAP ? standardBeatmap.general.previewTime : 0;
 
