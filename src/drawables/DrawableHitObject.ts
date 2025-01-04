@@ -1,5 +1,10 @@
 import {HitObject} from "osu-classes";
 
+/**
+ * Abstract class representing a drawable hit object.
+ *
+ * @template T - The type of the hit object, extending {@link HitObject}.
+ */
 export default abstract class DrawableHitObject<THitObject extends HitObject> {
     hitObject: THitObject;
 
