@@ -5,8 +5,8 @@ import {BeatmapDecoder} from "osu-parsers";
 import {PREVIEW_TIME_FROM_BEATMAP} from "../main.ts";
 
 export default abstract class BeatmapPreviewer<TBeatmap extends RulesetBeatmap, TRenderer extends Renderer<RulesetBeatmap, DrawableHitObject<HitObject>>> {
-    private readonly canvas: HTMLCanvasElement;
-    private readonly ctx: CanvasRenderingContext2D;
+    protected readonly canvas: HTMLCanvasElement;
+    protected readonly ctx: CanvasRenderingContext2D;
 
     private decoder: BeatmapDecoder;
     private renderer!: TRenderer;
@@ -37,24 +37,35 @@ export default abstract class BeatmapPreviewer<TBeatmap extends RulesetBeatmap, 
         this.decoder = new BeatmapDecoder();
     }
 
-    private animate(totalLength: number) {
-        const animate = (currentTime: number) => {
+    private animateBeatmap(totalLength: number) {
+        const animateBeatmap = (currentTime: number) => {
             const time = (currentTime - this.startTime + this.previewTime);
 
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.ctx.save();
+            this.ctx.translate(64,48);
             this.renderer.render(time);
+            this.ctx.restore();
 
             if (time > totalLength) {
                 this.startTime = performance.now();
             }
 
-            requestAnimationFrame(animate);
+            requestAnimationFrame(animateBeatmap);
         }
 
-        requestAnimationFrame(animate);
+        requestAnimationFrame(animateBeatmap);
     }
 
     public async loadBeatmap(url: string) {
+    private clearScreen() {
+        const clear = () => {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            requestAnimationFrame(clear);
+        }
+
+        requestAnimationFrame(clear);
+    }
+
         const response = await fetch(url);
         const data = await response.text();
 
@@ -64,6 +75,8 @@ export default abstract class BeatmapPreviewer<TBeatmap extends RulesetBeatmap, 
         this.renderer = this.createRenderer(this.ctx, appliedBeatmap);
         this.previewTime = PREVIEW_TIME_FROM_BEATMAP ? appliedBeatmap.general.previewTime : 0;
 
-        this.animate(appliedBeatmap.totalLength);
+        this.clearScreen();
+
+        this.animateBeatmap(appliedBeatmap.totalLength);
     }
 }
