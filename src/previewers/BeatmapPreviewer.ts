@@ -56,7 +56,6 @@ export default abstract class BeatmapPreviewer<TBeatmap extends RulesetBeatmap, 
         requestAnimationFrame(animateBeatmap);
     }
 
-    public async loadBeatmap(url: string) {
     private clearScreen() {
         const clear = () => {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -66,11 +65,13 @@ export default abstract class BeatmapPreviewer<TBeatmap extends RulesetBeatmap, 
         requestAnimationFrame(clear);
     }
 
+    public async loadBeatmap(url: string, mods: number = 0) {
         const response = await fetch(url);
         const data = await response.text();
 
         const rawBeatmap = this.decoder.decodeFromString(data);
-        const appliedBeatmap = this.ruleset.applyToBeatmap(rawBeatmap) as TBeatmap;
+        const appliedMods = this.ruleset.createModCombination(mods);
+        const appliedBeatmap = this.ruleset.applyToBeatmapWithMods(rawBeatmap, appliedMods) as TBeatmap;
 
         this.renderer = this.createRenderer(this.ctx, appliedBeatmap);
         this.previewTime = PREVIEW_TIME_FROM_BEATMAP ? appliedBeatmap.general.previewTime : 0;
