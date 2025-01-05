@@ -17,8 +17,6 @@ It is mathematically correct for a Bézier curve, but osu! uses approximation fo
 - Simple skinning.
 - Mod support.
 
----
-
 ## Installation and Setup
 
 ### Prerequisites:
