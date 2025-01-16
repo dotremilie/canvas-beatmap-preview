@@ -1,15 +1,17 @@
 import {Slider} from "osu-standard-stable";
-import {CIRCLE_BORDER_WIDTH} from "../../renderers/StandardRenderer.ts";
 import {Color4} from "osu-classes";
 import {DrawableStandardHitObject} from "./DrawableStandardHitObject.ts";
+import {CIRCLE_BORDER_WIDTH} from "../../renderers/StandardRenderer.ts";
 
 // TODO: Separate SliderPath into its own class
 export class DrawableSliderBody extends DrawableStandardHitObject<Slider> {
-    color: Color4;
+    accentColor: Color4;
+    borderColor: Color4;
 
-    constructor(hitObject: Slider, color: Color4) {
+    constructor(hitObject: Slider, accentColor: Color4 = new Color4(255, 255, 255), borderColor: Color4 = new Color4(255, 255, 255)) {
         super(hitObject);
-        this.color = color;
+        this.accentColor = accentColor;
+        this.borderColor = borderColor;
     }
 
     draw(ctx: CanvasRenderingContext2D, time: number) {
@@ -28,10 +30,10 @@ export class DrawableSliderBody extends DrawableStandardHitObject<Slider> {
         ctx.lineJoin = 'round';
         ctx.lineCap = 'round';
         ctx.lineWidth = radius * 2;
-        ctx.strokeStyle = `rgba(255,255,255,${opacity})`;
+        ctx.strokeStyle = `rgba(${this.borderColor.red},${this.borderColor.green},${this.borderColor.blue},${opacity})`;
         ctx.stroke();
         ctx.lineWidth = radius * 2 * (1 - CIRCLE_BORDER_WIDTH);
-        ctx.strokeStyle = `rgba(${this.color.red},${this.color.green},${this.color.blue},${opacity})`;
+        ctx.strokeStyle = `rgba(${this.accentColor.red},${this.accentColor.green},${this.accentColor.blue},${opacity})`;
         ctx.stroke();
     }
 
