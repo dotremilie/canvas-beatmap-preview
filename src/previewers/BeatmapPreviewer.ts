@@ -19,9 +19,17 @@ export default abstract class BeatmapPreviewer<TBeatmap extends RulesetBeatmap, 
         private ruleset: Ruleset,
         private createRenderer: (ctx: CanvasRenderingContext2D, beatmap: TBeatmap) => TRenderer
     ) {
-        this.canvas = document.createElement("canvas") as HTMLCanvasElement;
-        this.canvas.setAttribute("id", this.id);
-        document.body.appendChild(this.canvas);
+        this.canvas = document.querySelector(`#${id}`) as HTMLCanvasElement;
+
+        if (!this.canvas) {
+            this.canvas = document.createElement("canvas") as HTMLCanvasElement;
+            this.canvas.setAttribute("id", this.id);
+            document.body.appendChild(this.canvas);
+        }
+
+        if (!(this.canvas instanceof HTMLCanvasElement)) {
+            throw new Error("Queried element is not a HTMLCanvasElement");
+        }
 
         const ctx = this.canvas.getContext("2d");
         if (!ctx) {
