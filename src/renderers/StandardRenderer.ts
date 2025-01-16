@@ -34,9 +34,19 @@ export default class StandardRenderer extends RulesetRenderer<StandardBeatmap, D
                 this.drawableHitObjects.push(new DrawableCircle(object, color));
             }
         });
+
+        if (this.beatmap.mods.has(64)) {
+            this.time_multiplier = 1.5;
+        }
+
+        if (this.beatmap.mods.has(256)) {
+            this.time_multiplier = 0.75;
+        }
     }
 
     public render(time: number): void {
+        time = time / this.time_multiplier;
+
         const hitObjects = this.drawableHitObjects.filter(object => {
             if (time < object.hitObject.startTime - object.hitObject.timePreempt) return false;
 

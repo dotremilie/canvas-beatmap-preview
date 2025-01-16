@@ -2,6 +2,7 @@ export default abstract class Renderer<TBeatmap, THitObject> {
     protected ctx: CanvasRenderingContext2D;
     protected beatmap: TBeatmap;
     protected drawableHitObjects: THitObject[] = [];
+    protected time_multiplier: number = 1;
 
     constructor(ctx: CanvasRenderingContext2D, beatmap: TBeatmap) {
         this.ctx = ctx;
