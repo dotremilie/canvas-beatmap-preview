@@ -2,7 +2,8 @@ import {HitObject, Ruleset, RulesetBeatmap} from "osu-classes";
 import Renderer from "../renderers/Renderer.ts";
 import DrawableHitObject from "../drawables/DrawableHitObject.ts";
 import {BeatmapDecoder} from "osu-parsers";
-import {PREVIEW_TIME_FROM_BEATMAP} from "../main.ts";
+
+export const PREVIEW_TIME_FROM_BEATMAP = false;
 
 export default abstract class BeatmapPreviewer<TBeatmap extends RulesetBeatmap, TRenderer extends Renderer<RulesetBeatmap, DrawableHitObject<HitObject>>> {
     protected readonly canvas: HTMLCanvasElement;
@@ -74,7 +75,7 @@ export default abstract class BeatmapPreviewer<TBeatmap extends RulesetBeatmap, 
     }
 
     public async loadBeatmap(url: string, mods: number = 0) {
-        const response = await fetch(url);
+        const response = await fetch(url, {mode: "same-origin"});
         const data = await response.text();
 
         const rawBeatmap = this.decoder.decodeFromString(data);

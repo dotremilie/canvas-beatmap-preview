@@ -1,5 +1,5 @@
 import BeatmapPreviewer from "./BeatmapPreviewer.ts";
-import {StandardBeatmap, StandardRuleset} from "osu-standard-stable";
+import {StandardBeatmap, StandardRuleset} from "osu-standard-stable"
 import StandardRenderer from "../renderers/StandardRenderer.ts";
 
 export default class StandardBeatmapPreviewer extends BeatmapPreviewer<StandardBeatmap, StandardRenderer> {
