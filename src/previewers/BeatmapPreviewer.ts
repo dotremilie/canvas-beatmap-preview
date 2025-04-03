@@ -1,4 +1,4 @@
-import {HitObject, Ruleset, RulesetBeatmap} from "osu-classes";
+import {BeatmapMetadataSection, HitObject, Ruleset, RulesetBeatmap} from "osu-classes";
 import Renderer from "../renderers/Renderer.ts";
 import DrawableHitObject from "../drawables/DrawableHitObject.ts";
 import {BeatmapDecoder} from "osu-parsers";
@@ -14,6 +14,12 @@ export default abstract class BeatmapPreviewer<TBeatmap extends RulesetBeatmap, 
 
     private startTime: number = 0;
     private previewTime: number = 0;
+
+    private metadata: BeatmapMetadataSection | null = null;
+
+    public get getMetadata() {
+        return this.metadata;
+    }
 
     protected constructor(
         private id: string,
@@ -81,6 +87,8 @@ export default abstract class BeatmapPreviewer<TBeatmap extends RulesetBeatmap, 
         const rawBeatmap = this.decoder.decodeFromString(data);
         const appliedMods = this.ruleset.createModCombination(mods);
         const appliedBeatmap = this.ruleset.applyToBeatmapWithMods(rawBeatmap, appliedMods) as TBeatmap;
+
+        this.metadata = appliedBeatmap.metadata;
 
         this.renderer = this.createRenderer(this.ctx, appliedBeatmap);
         this.previewTime = PREVIEW_TIME_FROM_BEATMAP ? appliedBeatmap.general.previewTime : 0;
