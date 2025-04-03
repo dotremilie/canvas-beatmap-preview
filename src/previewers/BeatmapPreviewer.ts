@@ -17,10 +17,6 @@ export default abstract class BeatmapPreviewer<TBeatmap extends RulesetBeatmap, 
 
     private metadata: BeatmapMetadataSection | null = null;
 
-    public get getMetadata() {
-        return this.metadata;
-    }
-
     protected constructor(
         private id: string,
         private ruleset: Ruleset,
@@ -52,36 +48,12 @@ export default abstract class BeatmapPreviewer<TBeatmap extends RulesetBeatmap, 
         this.decoder = new BeatmapDecoder();
     }
 
-    private animateBeatmap(totalLength: number) {
-        const animateBeatmap = (currentTime: number) => {
-            const time = (currentTime - this.startTime + this.previewTime);
-
-            this.ctx.save();
-            this.ctx.translate(64,48);
-            this.renderer.render(time);
-            this.ctx.restore();
-
-            if (time > totalLength) {
-                this.startTime = performance.now();
-            }
-
-            requestAnimationFrame(animateBeatmap);
-        }
-
-        requestAnimationFrame(animateBeatmap);
-    }
-
-    private clearScreen() {
-        const clear = () => {
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            requestAnimationFrame(clear);
-        }
-
-        requestAnimationFrame(clear);
+    public get getMetadata() {
+        return this.metadata;
     }
 
     public async loadBeatmap(url: string, mods: number = 0) {
-        const response = await fetch(url, {mode: "same-origin"});
+        const response = await fetch(url, {mode: "no-cors"});
         const data = await response.text();
 
         const rawBeatmap = this.decoder.decodeFromString(data);
@@ -92,9 +64,24 @@ export default abstract class BeatmapPreviewer<TBeatmap extends RulesetBeatmap, 
 
         this.renderer = this.createRenderer(this.ctx, appliedBeatmap);
         this.previewTime = PREVIEW_TIME_FROM_BEATMAP ? appliedBeatmap.general.previewTime : 0;
+    }
+
+    public updateFrame(time: number) {
+        time = (time - this.startTime + this.previewTime);
 
         this.clearScreen();
 
-        this.animateBeatmap(appliedBeatmap.totalLength);
+        this.ctx.save();
+        this.ctx.translate(64, 48);
+        this.renderer.render(time);
+        this.ctx.restore();
+    }
+
+    private clearScreen() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+
+    public setStartTime(time: number) {
+        this.startTime = time;
     }
 }
