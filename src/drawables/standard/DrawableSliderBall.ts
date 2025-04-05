@@ -25,7 +25,7 @@ export class DrawableSliderBall {
         const opacity = this.opacity(time);
         const scale = this.scale(time);
 
-        const circleSize = radius * (1 - CIRCLE_BORDER_WIDTH / 2);
+        const circleSize = radius * (1 - CIRCLE_BORDER_WIDTH);
         ctx.strokeStyle = `rgba(255,255,255,${opacity})`;
         ctx.lineWidth = radius * CIRCLE_BORDER_WIDTH;
         ctx.beginPath();

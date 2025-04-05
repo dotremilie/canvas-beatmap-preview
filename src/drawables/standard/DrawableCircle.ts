@@ -1,5 +1,4 @@
 import {Circle} from "osu-standard-stable";
-import {CIRCLE_BORDER_WIDTH} from "../../renderers/StandardRenderer.ts";
 import {Color4} from "osu-classes";
 import {DrawableStandardHitObject} from "./DrawableStandardHitObject.ts";
 import {DrawableApproachCircle} from "./DrawableApproachCircle.ts";
@@ -21,21 +20,40 @@ export class DrawableCircle extends DrawableStandardHitObject<Circle> {
 
         const scale = this.scale(time);
         const opacity = this.opacity(time);
-        const circleSize = radius * (1 - CIRCLE_BORDER_WIDTH / 2) * scale;
+        const circleSize = radius * scale;
 
-        ctx.lineWidth = radius * CIRCLE_BORDER_WIDTH;
+        const borderThickness = (circleSize * 2) * (2 / 58);
+        const gradientThickness = borderThickness * 2.5;
+        const outerGradientSize = (circleSize * 2) - borderThickness * 4;
+        const innerGradientSize = outerGradientSize - gradientThickness * 2;
+        const innerFillSize = innerGradientSize - gradientThickness * 2;
+
+        ctx.lineWidth = borderThickness;
         ctx.strokeStyle = `rgba(255,255,255,${opacity})`;
-        ctx.fillStyle = `rgba(${this.color.red},${this.color.green},${this.color.blue},${opacity})`;
         ctx.beginPath();
         ctx.arc(x, y, circleSize, 0, Math.PI * 2);
-        ctx.fill();
         ctx.stroke();
 
-        ctx.font = `600 ${radius}px "Exo 2"`;
+        ctx.fillStyle = `rgba(${this.color.red},${this.color.green},${this.color.blue},${opacity})`;
+        ctx.beginPath();
+        ctx.arc(x, y, outerGradientSize / 2, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = `rgba(${this.color.red / 1.5},${this.color.green / 1.5},${this.color.blue / 1.5},${opacity})`;
+        ctx.beginPath();
+        ctx.arc(x, y, innerGradientSize / 2, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = `rgba(${this.color.red / 4},${this.color.green / 4},${this.color.blue / 4},${opacity})`;
+        ctx.beginPath();
+        ctx.arc(x, y, innerFillSize / 2, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.font = `700 ${circleSize * 0.7}px "Torus"`;
         ctx.textBaseline = 'middle';
         ctx.textAlign = 'center';
         ctx.fillStyle = `rgba(255,255,255,${opacity})`;
-        ctx.fillText((currentComboIndex + 1).toString(), x, y);
+        ctx.fillText((currentComboIndex + 1).toString(), x, y + 1);
     }
 
     opacity(time: number): number {

@@ -19,6 +19,11 @@ export class DrawableSliderBody extends DrawableStandardHitObject<Slider> {
         const {x, y} = stackedStartPosition;
 
         const opacity = this.opacity(time);
+        const circleSize = radius * 2;
+
+        const borderThickness = (circleSize * 2) * (2 / 58);
+        const outerGradientSize = (circleSize * 2) - borderThickness * 4;
+        const pathRadius = outerGradientSize / 2;
 
         ctx.beginPath();
         ctx.moveTo(x, y);
@@ -29,10 +34,10 @@ export class DrawableSliderBody extends DrawableStandardHitObject<Slider> {
 
         ctx.lineJoin = 'round';
         ctx.lineCap = 'round';
-        ctx.lineWidth = radius * 2;
+        ctx.lineWidth = pathRadius;
         ctx.strokeStyle = `rgba(${this.borderColor.red},${this.borderColor.green},${this.borderColor.blue},${opacity})`;
         ctx.stroke();
-        ctx.lineWidth = radius * 2 * (1 - CIRCLE_BORDER_WIDTH);
+        ctx.lineWidth = pathRadius * (1 - borderThickness * 2 / pathRadius);
         ctx.strokeStyle = `rgba(${this.accentColor.red},${this.accentColor.green},${this.accentColor.blue},${opacity})`;
         ctx.stroke();
     }

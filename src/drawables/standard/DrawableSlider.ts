@@ -17,7 +17,11 @@ export class DrawableSlider extends DrawableStandardHitObject<Slider> {
     constructor(hitObject: Slider, color: Color4) {
         super(hitObject);
         this.color = color;
-        this.sliderBody = new DrawableSliderBody(hitObject, color);
+
+        const accentColor = new Color4(color.red / 4, color.green / 4, color.blue / 4);
+        const borderColor = new Color4(color.red, color.green, color.blue);
+
+        this.sliderBody = new DrawableSliderBody(hitObject, accentColor, borderColor);
         this.sliderHead = new DrawableSliderHead(hitObject, color);
         this.sliderBall = new DrawableSliderBall(this);
         //this.sliderRepeat = new DrawableSliderRepeat(hitObject, color);
