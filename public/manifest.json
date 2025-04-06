@@ -12,6 +12,7 @@
     "activeTab"
   ],
   "host_permissions": [
-    "https://osu.ppy.sh/beatmapsets/*#osu/*"
+    "https://osu.ppy.sh/beatmapsets/*#osu/*",
+    "https://localhost:5173/*"
   ]
 }

@@ -4,6 +4,10 @@ export default abstract class Renderer<TBeatmap, THitObject> {
     protected drawableHitObjects: THitObject[] = [];
     protected time_multiplier: number = 1;
 
+    get getBeatmap(): Readonly<TBeatmap> {
+        return this.beatmap;
+    }
+
     constructor(ctx: CanvasRenderingContext2D, beatmap: TBeatmap) {
         this.ctx = ctx;
         this.beatmap = beatmap;

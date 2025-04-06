@@ -1,7 +1,10 @@
-import React, {createContext, ReactNode, useContext, useEffect, useRef, useState} from 'react';
+import React, { createContext, ReactNode, useContext, useEffect, useRef, useState } from 'react';
 
 interface TimeContextProps {
     timestamp: number;
+    setTimestamp: (timestamp: number) => void;
+    totalLength: number;
+    setTotalLength: (length: number) => void;
     isRunning: boolean;
     start: () => void;
     stop: () => void;
@@ -10,16 +13,27 @@ interface TimeContextProps {
 
 const TimeContext = createContext<TimeContextProps | undefined>(undefined);
 
-export const TimeProvider: React.FC<{ children: ReactNode }> = ({children}) => {
-    const [timestamp, setTimestamp] = useState<number>(0);
+export const TimeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+    const [timestamp, _setTimestamp] = useState<number>(0);
+    const [totalLength, setTotalLength] = useState<number>(0);
     const [isRunning, setIsRunning] = useState<boolean>(false);
     const animationFrameRef = useRef<number | null>(null);
     const startTimeRef = useRef<number>(0);
     const elapsedTimeRef = useRef<number>(0);
 
+    const setTimestamp = (newTimestamp: number) => {
+        _setTimestamp(newTimestamp);
+        elapsedTimeRef.current = newTimestamp;
+
+        if (isRunning) {
+            startTimeRef.current = performance.now();
+        }
+    };
+
     useEffect(() => {
         const updateTime = (currentTime: number) => {
-            setTimestamp(elapsedTimeRef.current + (currentTime - startTimeRef.current));
+            const newTimestamp = elapsedTimeRef.current + (currentTime - startTimeRef.current);
+            _setTimestamp(newTimestamp);
             animationFrameRef.current = requestAnimationFrame(updateTime);
         };
 
@@ -35,10 +49,20 @@ export const TimeProvider: React.FC<{ children: ReactNode }> = ({children}) => {
         };
     }, [isRunning]);
 
+    useEffect(() => {
+        if (totalLength > 0 && timestamp >= totalLength) {
+            reset();
+        }
+    }, [timestamp, totalLength]);
+
     const start = () => {
         if (!isRunning) {
             setIsRunning(true);
             startTimeRef.current = performance.now();
+
+            if (timestamp === 0) {
+                elapsedTimeRef.current = 0;
+            }
         }
     };
 
@@ -52,11 +76,19 @@ export const TimeProvider: React.FC<{ children: ReactNode }> = ({children}) => {
     const reset = () => {
         setIsRunning(false);
         setTimestamp(0);
-        elapsedTimeRef.current = 0;
     };
 
     return (
-        <TimeContext.Provider value={{timestamp, isRunning, start, stop, reset}}>
+        <TimeContext.Provider value={{
+            timestamp,
+            setTimestamp,
+            totalLength,
+            setTotalLength,
+            isRunning,
+            start,
+            stop,
+            reset
+        }}>
             {children}
         </TimeContext.Provider>
     );
